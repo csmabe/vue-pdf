@@ -7,6 +7,9 @@ export default function(pdfjsWrapper) {
 
 	return {
 		createLoadingTask: createLoadingTask,
+		destroyPDF: function() {
+			this.pdf.destroy();
+		},
 		render: function(h) {
 			return h('span', {
 				attrs: {
