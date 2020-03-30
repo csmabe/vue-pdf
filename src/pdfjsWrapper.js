@@ -32,7 +32,10 @@ export default function(PDFJS) {
 			loadingTask.onPassword = options.onPassword;
 
 		if ( options && options.onProgress )
-			loadingTask.onProgress = options.onProgress;
+      loadingTask.onProgress = options.onProgress;
+
+    // expose destroy method so we can use it from just the loading task
+    loadingTask.destroy = this.destroy();
 
 		return loadingTask;
 	}
