@@ -1,4 +1,4 @@
-import { PDFLinkService } from 'pdfjs-dist/lib/web/pdf_link_service';
+import { PDFLinkService } from 'pdfjs-dist/es5/web/pdf_viewer';
 
 var pendingOperation = Promise.resolve();
 
@@ -7,6 +7,7 @@ export default function(PDFJS) {
 	function isPDFDocumentLoadingTask(obj) {
 
 		return typeof(obj) === 'object' && obj !== null && obj.__PDFDocumentLoadingTask === true;
+		// or: return obj.constructor.name === 'PDFDocumentLoadingTask';
 	}
 
 	function createLoadingTask(src, options) {
@@ -196,12 +197,12 @@ export default function(PDFJS) {
 			if ( pdfPage === null )
 				return;
 
-			rotate = (pdfPage.rotate === undefined ? 0 : pdfPage.rotate) + (rotate === undefined ? 0 : rotate);
+			var pageRotate = (pdfPage.rotate === undefined ? 0 : pdfPage.rotate) + (rotate === undefined ? 0 : rotate);
 
 			var scale = canvasElt.offsetWidth / pdfPage.getViewport({ scale: 1 }).width * (window.devicePixelRatio || 1);
-			var viewport = pdfPage.getViewport({ scale, rotation:rotate });
+			var viewport = pdfPage.getViewport({ scale: scale, rotation:pageRotate });
 
-			emitEvent('page-size', viewport.width, viewport.height);
+			emitEvent('page-size', viewport.width, viewport.height, scale);
 
 			canvasElt.width = viewport.width;
 			canvasElt.height = viewport.height;
